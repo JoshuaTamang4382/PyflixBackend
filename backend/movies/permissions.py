@@ -17,3 +17,7 @@ class IsAdminOrStaff(BasePermission):
         if user.is_authenticated and user.role in ['admin', 'staff']:
             return True
         return False
+
+class IsPublic(BasePermission):
+  
+  pass

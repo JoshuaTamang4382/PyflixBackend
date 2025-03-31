@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Movie
 from .serializers import MovieSerializer
-from .permissions import IsAdminOrStaff  # Import the custom permission
+from .permissions import IsAdminOrStaff, IsPublic  # Import the custom permission
 from rest_framework.permissions import IsAuthenticated
 
 class MovieListCreateView(APIView):
@@ -68,3 +68,15 @@ class MovieDetailView(APIView):
 
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MovieListGetView(APIView):
+    permission_classes = [IsPublic]  # Apply the custom permission class
+    def get(self, request):
+        """
+        Retrieve a list of movies (allowed for all users).
+        """
+        movies = Movie.objects.all()
+        serializer = MovieSerializer(movies, many=True)
+        return Response(serializer.data)
+
+
