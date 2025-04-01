@@ -18,6 +18,3 @@ class IsAdminOrStaff(BasePermission):
             return True
         return False
 
-class IsPublic(BasePermission):
-  
-  pass

@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-	'corsheaders.middleware.CorsMiddleware', 
+	'corsheaders.middleware.CorsMiddleware',  # Add CORS middleware before Django's own middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -146,7 +146,8 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",       
     "http://localhost:3000",
-	"http://localhost:5174",
+    "http://localhost:5174",
+    "http://localhost:5173",
 ]
 
 

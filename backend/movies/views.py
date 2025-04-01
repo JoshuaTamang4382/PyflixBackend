@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Movie
 from .serializers import MovieSerializer
-from .permissions import IsAdminOrStaff, IsPublic  # Import the custom permission
+from .permissions import IsAdminOrStaff  # Import the custom permission
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 class MovieListCreateView(APIView):
     permission_classes = [IsAuthenticated,IsAdminOrStaff]  # Apply the custom permission class
@@ -69,8 +70,9 @@ class MovieDetailView(APIView):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class MovieListGetView(APIView):
-    permission_classes = [IsPublic]  # Apply the custom permission class
+class MovieListGetPublic(APIView):
+    permission_classes = [AllowAny]  # Apply the custom permission class
+
     def get(self, request):
         """
         Retrieve a list of movies (allowed for all users).
@@ -79,4 +81,20 @@ class MovieListGetView(APIView):
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
 
+class MovieDetailPublicView(APIView):
+    permission_classes = [AllowAny]  # Apply the custom permission class
+
+    def get(self, request, movie_id):
+        """
+        Retrieve details of a specific movie (allowed for all users).
+        """
+        try:
+            movie = Movie.objects.get(movie_id=movie_id)
+        except Movie.DoesNotExist:
+            return Response({"detail": "Movie not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MovieSerializer(movie)
+        return Response(serializer.data)
+
+    
 
